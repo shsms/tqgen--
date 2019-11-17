@@ -2,6 +2,6 @@ SRCFILES = ./main.cc
 
 build:
 	mkdir -p build
-	g++ -o build/tqgen -lboost_program_options ${SRCFILES}
+	${env} g++ -o build/tqgen -std=c++17 -O2 ${SRCFILES} -lboost_program_options
 
 .PHONY: build
