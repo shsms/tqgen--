@@ -1,0 +1,6 @@
+[submodule "vendor/fmt"]
+	path = vendor/fmt
+	url = https://github.com/fmtlib/fmt.git
+[submodule "vendor/date"]
+	path = vendor/date
+	url = https://github.com/HowardHinnant/date

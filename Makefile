@@ -1,7 +1,10 @@
 SRCFILES = ./main.cc
 
+FMT = -Ivendor/fmt/include/ -Lvendor/fmt/build/ -lfmt
+PATHARGS = ${FMT}
+
 build:
 	mkdir -p build
-	${env} g++ -o build/tqgen -std=c++17 -O2 ${SRCFILES} -lboost_program_options
+	g++ -o build/tqgen -std=c++2a -g -Wall  ${SRCFILES} ${PATHARGS} -lboost_program_options
 
 .PHONY: build
