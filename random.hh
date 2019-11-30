@@ -32,7 +32,7 @@ class rand {
         return static_cast<double>(dst) / lce_m;
     }
 
-    template <typename T> constexpr auto uniform(T min, T max) {
+    template <typename T> constexpr T uniform(T min, T max) {
         return static_cast<T>(this->uniform_double() * (max - min) + min);
     }
 
@@ -55,7 +55,14 @@ class rand {
     constexpr auto normal(double min, double max) {
         auto mean = (max - min) / 2.0 + min,
              sd = (max - min) / (2.0 * 3.0); // 3.0 -> max sd
-        return this->normal() * sd + mean;
+        auto res = this->normal() * sd + mean;
+	if (res < min) {
+	    res = min;
+	}
+	if (res > max) {
+	    res = max;
+	}
+	return res;
     }
 
     template <typename T, std::size_t sz, std::size_t irwin_numbers = 12>

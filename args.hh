@@ -21,7 +21,7 @@ void parse_args(int argc, char *argv[]) {
   desc.add_options()("numstk,n",
                      po::value<int>(&args.numstk)->default_value(100),
                      "Number of stocks");
-  desc.add_options()("seed,s", po::value<int>(&args.seed)->default_value(1),
+  desc.add_options()("seed,S", po::value<int>(&args.seed)->default_value(1),
                      "Randomization seed");
   desc.add_options()("interval,i",
                      po::value<int>(&args.interval)->default_value(25),
