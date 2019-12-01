@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iostream>
 #include <thread>
+#include <unordered_set>
 #include <vector>
 
 std::shared_ptr<tqgen::rand> rnd;
@@ -70,8 +71,8 @@ constexpr std::string_view gen_name(tqgen::rand &r) {
     return std::string_view(ret);
 }
 
-std::set<std::string> gen_names(int n) {
-    std::set<std::string> res;
+std::unordered_set<std::string> gen_names(int n) {
+    std::unordered_set<std::string> res;
     tqgen::rand r(rnd->uniform());
     while (res.size() < n) {
         res.emplace(gen_name(r));
@@ -79,7 +80,7 @@ std::set<std::string> gen_names(int n) {
     return res;
 }
 
-auto gen_stocks(const std::set<std::string> &names) {
+auto gen_stocks(const std::unordered_set<std::string> &names) {
     std::vector<std::shared_ptr<stock>> stocks;
     tqgen::rand nr_liq(rnd->uniform());
     tqgen::rand nr_bpx(rnd->uniform());
@@ -187,7 +188,10 @@ void stock::gen_next_trade_quote(
 
 auto init_new_day_file(std::chrono::system_clock::time_point t,
                        std::string outfilepat) {
-    return std::ofstream("/dev/stdout", std::ios::out);
+     auto fp = std::ofstream("/dev/stdout", std::ios::out);
+     fp << fmt::format("date,arrTm,ticker,type,bidPx,bidSz,askPx,askSz,quotTm,trdPx,"
+               "trdSz,trdTm\n");
+     return fp;
 }
 
 int main(int argc, char *argv[]) {
@@ -199,8 +203,6 @@ int main(int argc, char *argv[]) {
 
     auto td = exch->get_next_tick_time();
     auto fp = init_new_day_file(td.time, args.out_file_pattern);
-    fmt::print("date,arrTm,ticker,type,bidPx,bidSz,askPx,askSz,quotTm,trdPx,"
-               "trdSz,trdTm\n");
     while (!td.done) {
         auto stock = exch->get_next_stock();
         stock->gen_next_trade_quote(td.time);
